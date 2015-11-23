@@ -1,0 +1,119 @@
+
+<div >
+
+    <div class = "container-fluid" style="margin: 0;
+    padding: 0;font-size: 20px; font-family: Lucida Grande">
+        <nav>
+            <ul >
+                <li>
+                    <h3>Welcome {{name}} </h3>
+
+                </li>
+                <li>
+                    <a ui-sref="ChangePassword" >Change Password</a>
+
+                </li>
+
+                <li class="pull-right" >
+                    <a ui-sref="Logout">Logout</a>
+
+                </li>
+
+            </ul>
+        </nav>
+    </div>
+
+    <div class="col-xs-12 col-md-3 " style="min-height: 900px; border-right: #000000 solid 1px">
+
+            <div class="container-fluid">
+
+                <form method="post" action="/uploadimage" enctype="multipart/form-data">
+
+                    <img style="width:50%;height:50%" name="name" ng-src="{{image}}"/>
+
+
+            <div style="margin-top:70px;">
+
+                <input type="file" name="file"><br />
+
+                <input type="submit" value="Upload">
+                </div>
+                </form>
+            </div>
+
+            </div>
+    </div>
+    <div class="col-xs-6 col-md-6 " style="min-height: 900px; border-right: #000000 solid 1px;border-left: #000000 solid 1px;" >
+
+        <div class="container">
+            <div class = "global-nav-inner">
+                <div>
+                    <form ng-submit="postTweet()">
+                        <br style="clear:both">
+                        <br>
+                        <div class="form-group col-md-4 ">
+                            <label id="messageLabel" for="message">Share What's on Your Mind ! </label>
+
+
+                            <textarea style="resize: none" name="tweet" ng-model="user_tweet.tweet" class="form-control input-sm " type="textarea" id="message" placeholder="Enter your tweet" maxlength="140" rows="7" required ></textarea>
+
+                        </div>
+                        <br style="clear:both">
+                        <div class="form-group col-md-2">
+
+                            <input class="btn btn-success" id="btnSubmit"  name="btnSubmit" style="height:35px" type="submit" value="Post"required>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="container-fluid" style="margin-top: 20px" >
+
+            <div class="qa-message-list" id="wallmessages" ng-repeat="usertweet in usertweets" >
+                <div class="message-item" id="m2">
+                    <div class="message-inner">
+                        <div class="message-head clearfix">
+                            <div class="avatar pull-left"><img src="images/avatar.png"></div>
+                            <div class="user-detail">
+                                <h5 class="handle">{{usertweet[1]}}</h5>
+                                <div class="post-meta">
+                                    <div class="asker-meta">
+                                        <span class="qa-message-what"></span>
+											<span class="qa-message-when">
+												<span class="qa-message-when-data">{{usertweet[2]|date :'medium'}}</span>
+											</span>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="qa-message-content">
+                            {{usertweet[3]}}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-6 col-md-3">
+        <h1>List of Users </h1>
+        <div class="container-fluid" ng-repeat="nonfollowers in displaynonfollowers" style="margin-top:20px">
+            <div style="background-color:lavender;height:40pt" >{{nonfollowers.nonfollowerobject[0]}}
+                <div class="pull-right">  <input class="btn btn-success" type="button" style="margin-top:10px" value="Follow" ng-click="followUsers(nonfollowers.nonfollowerobject[1])"  > </div>
+            </div>
+        </div>
+
+        <div class="container-fluid" ng-repeat="followers in displayfollowers" style="margin-top:20px">
+            <div style="background-color:lavenderblush;height:40pt;" >{{followers.followerobject[0]}}
+                <div class="pull-right">
+                    <input style="margin-top:10px" class="btn btn-info" type="button" value="Unfollow" ng-click="unfollowUser(followers.followerobject[1])">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
