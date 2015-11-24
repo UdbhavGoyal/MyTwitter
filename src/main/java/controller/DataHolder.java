@@ -19,6 +19,8 @@ public class DataHolder implements Serializable {
 
     String firstName;
 
+    String imageUrl;
+
 
     public String getFirstName() {
         return firstName;
@@ -42,5 +44,13 @@ public class DataHolder implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

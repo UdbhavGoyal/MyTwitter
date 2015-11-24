@@ -55,9 +55,9 @@ public class RequestHandler {
 
             if (user == null) {
 
-                user = new User(newUser.getString("firstname"), newUser.getString("lastname"), newUser.getString("email"), newUser.getString("password"),"images/userprofileimage.jpg");
+                user = new User(newUser.getString("firstname"), newUser.getString("lastname"), newUser.getString("email"), newUser.getString("password"), "images/userprofileimage.jpg");
                 userRepository.save(user);
-
+                    dataHolder.setImageUrl("images/userprofileimage.jpg");
                 Follow follow = new Follow(newUser.getString("email"), newUser.getString("email"));
                 followRepository.save(follow);
 
@@ -88,7 +88,8 @@ public class RequestHandler {
                     dataHolder.setPassword(loginUser.getString("password"));
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.put("name", user.getFirstName());
-                    jsonObject.put("imageurl",user.getImageUrl());
+                    jsonObject.put("imageurl", user.getImageUrl());
+                    dataHolder.setImageUrl(user.getImageUrl());
 
 
                     return new ResponseEntity(jsonObject.toString(), HttpStatus.OK);
@@ -113,9 +114,9 @@ public class RequestHandler {
 
                 userRepository.changePassword(pwd_details.getString("newpassword"), dataHolder.getEmail());
 
-               dataHolder.setPassword(pwd_details.getString("newpassword"));
+                dataHolder.setPassword(pwd_details.getString("newpassword"));
 
-              return new ResponseEntity(json, HttpStatus.OK);
+                return new ResponseEntity(json, HttpStatus.OK);
             }
 
         } catch (Exception e) {
@@ -201,7 +202,7 @@ public class RequestHandler {
     private ResponseEntity followUser(@RequestBody String json) {
 
         Follow follow;
-         System.out.print("Email in follow user method is"+json);
+        System.out.print("Email in follow user method is" + json);
         try {
             JSONObject jsonObject = new JSONObject(json);
 
@@ -222,7 +223,7 @@ public class RequestHandler {
         try {
             JSONObject jsonObject = new JSONObject(json);
 
-            followRepository.deleteFollowerRecord(dataHolder.getEmail(), jsonObject .getString("email"));
+            followRepository.deleteFollowerRecord(dataHolder.getEmail(), jsonObject.getString("email"));
 
         } catch (Exception e) {
             System.out.print("Error in unfollow user method is " + e);
@@ -233,16 +234,19 @@ public class RequestHandler {
 
 
     @RequestMapping(value = "/uploadimage", method = RequestMethod.POST)
-    public @ResponseBody void handleFileUpload(@RequestParam("file") MultipartFile file,HttpServletResponse response) {
+    public
+    @ResponseBody
+    void handleFileUpload(@RequestParam("file") MultipartFile file, HttpServletResponse response) {
         if (!file.isEmpty()) {
 
             try {
 
                 byte[] bytes = file.getBytes();
-                BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream("src/main/webapp/images/"+dataHolder.getEmail()+".jpg"));
+                BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream("src/main/webapp/images/" + dataHolder.getEmail() + ".jpg"));
                 stream.write(bytes);
                 stream.close();
-                userRepository.updateImage("../images/"+dataHolder.getEmail()+".jpg",dataHolder.getEmail());
+                userRepository.updateImage("../images/" + dataHolder.getEmail() + ".jpg", dataHolder.getEmail());
+                dataHolder.setImageUrl("../images/" + dataHolder.getEmail()+ ".jpg");
 
                 response.sendRedirect("/#/dashboard");
 
@@ -261,4 +265,17 @@ public class RequestHandler {
         return new ResponseEntity(list, HttpStatus.ACCEPTED);
     }
 
+    @RequestMapping(value = "/userdata", method = RequestMethod.POST)
+    public ResponseEntity sendUserData() {
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+
+            jsonObject.put("profileimage", dataHolder.getImageUrl());
+
+        } catch (Exception e) {
+
+        }
+        return new ResponseEntity(jsonObject.toString(), HttpStatus.ACCEPTED);
+    }
 }

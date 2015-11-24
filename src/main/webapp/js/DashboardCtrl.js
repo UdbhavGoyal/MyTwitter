@@ -10,6 +10,15 @@ app.controller('DashboardCtrl',function($scope,loggedUserDetails,$http,$state) {
 
     $scope.name=loggedUserDetails.getName();
 
+           $http.post("/userdata")
+
+             .then(
+             function (response) {
+                 $scope.image = response.data.profileimage;
+
+             }
+         );
+
      $scope.image = loggedUserDetails.getUserImage();
 
 
